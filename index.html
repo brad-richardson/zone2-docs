@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zone2 — the Zone 2 ride that stays easy</title>
+<meta name="description" content="Zone2 holds your heart rate in your easy aerobic band by steering your smart trainer's power for you — so an easy ride stays easy instead of drifting into tempo.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="site">
+    <a class="logo" href="index.html">ZONE<span>2</span></a>
+    <nav class="top">
+      <a href="notes.html">Build notes</a>
+      <a href="support.html">Support</a>
+      <a href="privacy.html">Privacy</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <span class="chip"><span class="dot"></span>The easy-day specialist</span>
+    <h1>The Zone&nbsp;2 ride that stays easy.</h1>
+    <p class="lead">Power changes so your effort doesn&rsquo;t. Zone2 watches your
+    heart rate and quietly eases your smart trainer to keep the ride in your easy
+    aerobic band&nbsp;— so you finish the ride you intended, not one you
+    accidentally raced.</p>
+
+    <div class="actions">
+      <a class="btn primary" href="notes.html">How it works &rarr;</a>
+      <a class="btn ghost" href="#what">What you get</a>
+    </div>
+    <p class="small" style="margin-top:16px">iPhone &amp; iPad&nbsp;· heart-rate &amp; smart-trainer over Bluetooth&nbsp;· <span class="muted">coming to the App&nbsp;Store</span></p>
+  </section>
+
+  <!-- Signature "Easy Band" visual: HR held in the band, power free to ease below -->
+  <figure class="band" aria-label="A chart: heart rate settles inside the easy band while trainer power eases below it.">
+    <svg viewBox="0 0 760 300" role="img" xmlns="http://www.w3.org/2000/svg">
+      <!-- easy band -->
+      <rect x="0" y="110" width="760" height="60" rx="14" fill="rgba(103,196,159,.16)"/>
+      <line x1="0" y1="110" x2="760" y2="110" stroke="#67c49f" stroke-opacity=".55" stroke-width="1"/>
+      <line x1="0" y1="170" x2="760" y2="170" stroke="#67c49f" stroke-opacity=".55" stroke-width="1"/>
+      <!-- heart-rate trace: warms into the band, then settles -->
+      <path d="M 16,198 C 80,198 118,150 190,143 C 320,133 440,146 560,140 C 630,137 700,142 744,140"
+            fill="none" stroke="#67c49f" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="744" cy="140" r="5" fill="#67c49f" stroke="#0b2027" stroke-width="2"/>
+      <!-- power trace, lower lane: free to bend and ease -->
+      <path d="M 16,220 C 120,220 150,224 210,230 C 320,241 360,256 470,262 C 560,266 660,263 744,266"
+            fill="none" stroke="#6db8da" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="744" cy="266" r="5" fill="#6db8da" stroke="#0b2027" stroke-width="2"/>
+      <!-- labels -->
+      <text x="16" y="98"  fill="#67c49f" font-size="13" font-weight="700" font-family="-apple-system, sans-serif">Heart rate — held in your easy band</text>
+      <text x="16" y="292" fill="#6db8da" font-size="13" font-weight="700" font-family="-apple-system, sans-serif">Trainer power — free to ease as you warm up</text>
+    </svg>
+    <figcaption>Normal ERG locks the watts, so your heart rate drifts upward as
+    you warm up and fatigue. Zone2 flips it: it holds the effort and lets the
+    power move.</figcaption>
+  </figure>
+
+  <h2 id="what">What you get</h2>
+  <div class="grid cols-2">
+    <div class="tile">
+      <div class="k">Stays easy</div>
+      <h3>Effort, not watts</h3>
+      <p>Pick a band and pedal. Zone2 nudges the trainer every few seconds to keep
+      your heart rate in the easy aerobic zone — and backs off faster than it
+      pushes.</p>
+    </div>
+    <div class="tile">
+      <div class="k">Safe by design</div>
+      <h3>It fails toward easy</h3>
+      <p>A hard heart-rate ceiling, a power limit you set, and a lost-signal rule
+      that eases the trainer down — never up. The safety logic lives in a tested
+      core, not the UI.</p>
+    </div>
+    <div class="tile">
+      <div class="k">Yours</div>
+      <h3>Private &amp; local</h3>
+      <p>No account, no servers, no tracking. Your rides stay on your device. Write
+      to Apple&nbsp;Health if you want; export a standard FIT file any time.</p>
+    </div>
+    <div class="tile">
+      <div class="k">Honest</div>
+      <h3>Measured, not guessed</h3>
+      <p>Set your band from age, threshold, or a short DFA&#8209;a1 step test — with
+      its uncertainty shown plainly, never dressed up as more precise than it is.</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <span class="label">For experienced cyclists</span>
+    Stop turning recovery and endurance rides into tempo. Zone2 backs off ERG
+    power automatically when cardiac drift arrives, so the easy day remains the
+    easy day — no watching HR and nudging the trainer down yourself.
+  </div>
+
+  <h2>Built in the open</h2>
+  <p>Zone2's decision-making — the controller, the calibration, the safety
+  invariants — lives in a portable, I/O-free core that the same tests exercise
+  from Rust, Python, and Swift. I wrote up how it works, what the research says,
+  and what I got wrong along the way, plus a small set of real (scrubbed) ride
+  data so you don&rsquo;t have to start from nothing like I did.</p>
+  <div class="actions">
+    <a class="btn ghost" href="notes.html">Read the build notes &amp; science &rarr;</a>
+    <a class="btn ghost" href="https://github.com/brad-richardson/zone2-docs">Sample data on GitHub &rarr;</a>
+  </div>
+
+  <footer class="site">
+    <nav>
+      <a href="notes.html">Build notes</a>
+      <a href="support.html">Support</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="https://github.com/brad-richardson/zone2-docs">GitHub</a>
+    </nav>
+    Zone2 — HR-clamped Zone&nbsp;2 training for smart trainers. Made by Brad Richardson.
+  </footer>
+</div>
+</body>
+</html>

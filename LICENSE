@@ -1,0 +1,34 @@
+SPDX-License-Identifier: CC-BY-4.0
+
+Copyright (c) 2026 Brad Richardson
+
+Except where noted below, the contents of this repository — the website pages,
+the build notes, the research documents, and the Zone2 sample datasets — are
+licensed under the Creative Commons Attribution 4.0 International License
+(CC BY 4.0).
+
+You are free to:
+  - Share — copy and redistribute the material in any medium or format
+  - Adapt — remix, transform, and build upon the material for any purpose,
+    including commercially
+
+Under the following terms:
+  - Attribution — You must give appropriate credit (to "Zone2 / Brad Richardson"
+    with a link to this repository), provide a link to the license, and indicate
+    if changes were made. You may do so in any reasonable manner, but not in any
+    way that suggests the licensor endorses you or your use.
+
+No warranties are given. The material is provided "as is." It is not medical
+advice.
+
+The full license text is available at:
+  https://creativecommons.org/licenses/by/4.0/legalcode
+
+------------------------------------------------------------------------------
+Third-party material (NOT covered by the license above):
+
+  datasets/real_rr_nsr2db.txt
+    Derived from the PhysioNet Normal Sinus Rhythm RR Interval Database
+    (nsr2db, v1.0.0), record nsr001. Used under its PhysioNet license; see the
+    attribution header in the file and https://physionet.org/content/nsr2db/1.0.0/.
+    Retain that attribution on any redistribution.

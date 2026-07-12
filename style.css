@@ -1,0 +1,185 @@
+/* ==========================================================================
+   Zone2 — public site styling.
+   "Calm Instrument" design system, ported verbatim from the app's tokens
+   (ios/Zone2/Theme/Palette.swift → the visual-overhaul prototype). Warm navy
+   canvas, sage = easy/success, mineral blue = power/links, apricot = primary
+   action, teal = brand. Red is reserved for safety only. One shared sheet for
+   every page so the site reads as one instrument.
+   ========================================================================== */
+:root {
+  color-scheme: dark;
+  --surface:    #0b2027;  /* warm navy canvas — never pure black */
+  --surface-2:  #142d34;  /* elevated card */
+  --surface-3:  #07191f;  /* recessed (ride-dim) */
+  --ink:        #eff4ef;  /* primary text */
+  --muted:      #aec2bf;  /* secondary text */
+  --line:       rgba(235,244,238,.11);
+  --easy:       #67c49f;  /* sage — in-band / good / success */
+  --easy-soft:  rgba(103,196,159,.16);
+  --power:      #6db8da;  /* mineral blue — power / links */
+  --brand:      #2ec2d3;  /* teal — identity / wordmark */
+  --warn:       #dfae64;  /* amber — caution */
+  --action:     #f29a62;  /* apricot — primary call to action */
+  --action-ink: #182124;  /* dark ink on apricot */
+  --danger:     #c64f54;  /* red — safety only */
+  --maxw: 760px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* a single soft sage bloom near the top — the app's ambient glow */
+  background-image: radial-gradient(ellipse 70% 40% at 50% -4%,
+    rgba(103,196,159,.10), transparent 60%);
+  background-repeat: no-repeat;
+}
+
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 40px 22px 88px; }
+.wrap.wide { max-width: 880px; }
+
+/* --- brand / wordmark ---------------------------------------------------- */
+header.site {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding-bottom: 8px; margin-bottom: 22px;
+}
+.logo {
+  font-weight: 850; letter-spacing: .18em; font-size: 20px; color: var(--ink);
+  text-decoration: none;
+}
+.logo span { color: var(--brand); }
+.eyebrow {
+  text-transform: uppercase; letter-spacing: .13em; font-size: 11px;
+  font-weight: 800; color: var(--easy); margin: 0 0 10px;
+}
+nav.top { display: flex; gap: 18px; font-size: 14px; }
+nav.top a { color: var(--muted); text-decoration: none; }
+nav.top a:hover { color: var(--ink); }
+
+/* --- type ---------------------------------------------------------------- */
+h1 {
+  font-size: clamp(34px, 6vw, 52px); line-height: 1.03; letter-spacing: -.045em;
+  font-weight: 720; margin: 10px 0 6px;
+}
+h2 {
+  font-size: 26px; line-height: 1.15; letter-spacing: -.025em; font-weight: 700;
+  margin: 52px 0 12px;
+}
+h3 { font-size: 19px; letter-spacing: -.01em; margin: 34px 0 8px; }
+p, li { color: #dbe4e0; }
+.lead { font-size: clamp(19px, 2.6vw, 23px); color: var(--ink); line-height: 1.5; max-width: 34em; }
+.muted { color: var(--muted); }
+.small { font-size: 13.5px; color: var(--muted); }
+strong { color: var(--ink); font-weight: 680; }
+a { color: var(--power); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+hr { border: 0; border-top: 1px solid var(--line); margin: 40px 0; }
+
+ul, ol { padding-left: 1.25em; }
+li { margin: 6px 0; }
+li::marker { color: var(--easy); }
+
+blockquote {
+  margin: 20px 0; padding: 4px 0 4px 18px; border-left: 3px solid var(--easy);
+  color: var(--ink); font-size: 19px; line-height: 1.5;
+}
+blockquote.mechanism { border-left-color: var(--power); }
+
+/* --- cards / callouts ---------------------------------------------------- */
+.card {
+  background: var(--surface-2); border: 1px solid var(--line); border-radius: 16px;
+  padding: 20px 22px; margin: 22px 0;
+}
+.card p:first-child { margin-top: 0; }
+.card p:last-child { margin-bottom: 0; }
+
+.note {
+  border-radius: 14px; padding: 15px 18px; margin: 22px 0;
+  background: var(--easy-soft); border: 1px solid rgba(103,196,159,.30);
+}
+.note.warn { background: rgba(223,174,100,.12); border-color: rgba(223,174,100,.32); }
+.note .label {
+  display: block; text-transform: uppercase; letter-spacing: .1em;
+  font-size: 11px; font-weight: 800; color: var(--easy); margin-bottom: 4px;
+}
+.note.warn .label { color: var(--warn); }
+
+/* --- hero + signature "Easy Band" --------------------------------------- */
+.hero { padding: 8px 0 6px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px;
+  border-radius: 999px; background: var(--easy-soft); color: var(--easy);
+  font-size: 12.5px; font-weight: 700; margin-bottom: 20px;
+}
+.chip .dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--easy);
+  box-shadow: 0 0 0 4px rgba(103,196,159,.14);
+}
+
+/* the Easy Band: HR contained in a sage band, power free to bend below it */
+figure.band { margin: 30px 0; }
+figure.band svg { width: 100%; height: auto; display: block; }
+figure.band figcaption { margin-top: 12px; font-size: 13.5px; color: var(--muted); }
+
+/* --- buttons ------------------------------------------------------------- */
+.actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 30px 0 8px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 13px 22px; border-radius: 14px; font-weight: 720; font-size: 15px;
+  text-decoration: none; border: 1px solid transparent;
+}
+.btn.primary { background: var(--action); color: var(--action-ink);
+  box-shadow: 0 10px 26px rgba(242,154,98,.18); }
+.btn.primary:hover { text-decoration: none; filter: brightness(1.04); }
+.btn.ghost { border-color: var(--line); color: var(--ink); background: rgba(255,255,255,.02); }
+.btn.ghost:hover { border-color: var(--power); text-decoration: none; }
+
+/* --- feature grid -------------------------------------------------------- */
+.grid { display: grid; gap: 14px; margin: 26px 0; }
+@media (min-width: 620px) { .grid.cols-2 { grid-template-columns: 1fr 1fr; } }
+.tile {
+  background: var(--surface-2); border: 1px solid var(--line); border-radius: 16px;
+  padding: 18px 20px;
+}
+.tile h3 { margin: 0 0 6px; font-size: 16px; letter-spacing: 0; }
+.tile p { margin: 0; font-size: 14.5px; color: var(--muted); }
+.tile .k { font-size: 13px; font-weight: 800; letter-spacing: .04em; color: var(--power); text-transform: uppercase; }
+
+/* --- tables -------------------------------------------------------------- */
+.table-wrap { overflow-x: auto; margin: 22px 0; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+
+/* --- code ---------------------------------------------------------------- */
+code {
+  font-family: "SF Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .88em; background: rgba(255,255,255,.055); padding: 1px 6px; border-radius: 6px;
+  color: #d7e3df;
+}
+pre {
+  background: var(--surface-3); border: 1px solid var(--line); border-radius: 12px;
+  padding: 16px 18px; overflow-x: auto; font-size: 13px; line-height: 1.55;
+}
+pre code { background: none; padding: 0; }
+
+/* --- footer -------------------------------------------------------------- */
+footer.site {
+  margin-top: 64px; padding-top: 22px; border-top: 1px solid var(--line);
+  color: var(--muted); font-size: 13.5px;
+}
+footer.site a { color: var(--muted); }
+footer.site nav { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; }
+footer.site nav a { color: var(--ink); }
+
+.updated { color: var(--muted); font-size: 13px; margin: 0 0 4px; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }

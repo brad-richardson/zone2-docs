@@ -29,6 +29,10 @@ Third-party material (NOT covered by the license above):
 
   datasets/real_rr_nsr2db.txt
     Derived from the PhysioNet Normal Sinus Rhythm RR Interval Database
-    (nsr2db, v1.0.0), record nsr001. Used under its PhysioNet license; see the
-    attribution header in the file and https://physionet.org/content/nsr2db/1.0.0/.
-    Retain that attribution on any redistribution.
+    (nsr2db, v1.0.0), record nsr001. Licensed under the Open Data Commons
+    Attribution License v1.0 (ODC-By 1.0):
+      https://physionet.org/content/nsr2db/view-license/1.0.0/
+    Database: https://physionet.org/content/nsr2db/1.0.0/
+    PhysioNet resource paper: Goldberger AL, et al. (2000), "PhysioBank,
+    PhysioToolkit, and PhysioNet," Circulation 101(23):e215-e220.
+    Retain the attribution header in the file on any redistribution.

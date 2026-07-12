@@ -140,9 +140,12 @@
 
   <div class="note warn">
     <span class="label">Nothing here is novel — and that&rsquo;s the point</span>
-    The a1&nbsp;=&nbsp;0.75 aerobic-threshold landmark is <strong>Rogers, Gronwald
-    et&nbsp;al. (2021)</strong>. The idea sits on Gronwald&rsquo;s and Flatt&rsquo;s
-    HRV-complexity work, and the whole R-R&nbsp;→&nbsp;a1 pipeline was already in
+    The a1&nbsp;=&nbsp;0.75 aerobic-threshold landmark is <strong>Rogers
+    et&nbsp;al. (2021,
+    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7845545/">Frontiers in Physiology</a>)</strong>.
+    It sits on Gronwald&rsquo;s and Flatt&rsquo;s HRV-complexity work, the artifact
+    filter is <a href="https://pubmed.ncbi.nlm.nih.gov/31314618/">Lipponen &amp;
+    Tarvainen (2019)</a>, and the whole R-R&nbsp;→&nbsp;a1 pipeline was already in
     hobbyist tools (FatMaxxer, HRV&nbsp;Logger / Marco&nbsp;Altini) before I touched
     it. My box-counting matches the reference <code>nolds</code> implementation to
     ~1e&#8209;15 on public PhysioNet data. I built an implementation, not a discovery.
@@ -268,8 +271,8 @@
     (what every HRV app exports), enough to reproduce the DFA-a1 baseline.</li>
     <li><a href="datasets/real_rr_nsr2db.txt">datasets/real_rr_nsr2db.txt</a> — 480
     beats from PhysioNet&rsquo;s Normal Sinus Rhythm RR database, the fixture the a1
-    box-math is validated against. Used under its
-    <a href="https://physionet.org/content/nsr2db/1.0.0/">PhysioNet license</a>
+    box-math is validated against. Used under
+    <a href="https://physionet.org/content/nsr2db/view-license/1.0.0/">ODC-By&nbsp;1.0</a>
     (attribution in the file header).</li>
   </ul>
 
@@ -291,9 +294,25 @@
   <ul class="small">
     <li>San Millán, Zone 2 (no cadence prescription) — <a href="https://www.highnorth.co.uk/articles/zone-2-training-inigo-san-millan">highnorth.co.uk</a></li>
     <li>TrainerDay HR control modes — <a href="https://trainerday.com/blog/understanding-control-modes-erg-slope-resistance-and-hr-in-trainerday">trainerday.com</a></li>
-    <li>Rogers &amp; Gronwald et al. (2021), DFA-a1 aerobic/anaerobic threshold detection — <em>Frontiers in Physiology</em> (a1&nbsp;=&nbsp;0.75 aerobic-threshold landmark)</li>
-    <li>Lipponen &amp; Tarvainen (2019), robust R-R artifact correction — <em>Journal of Medical Engineering &amp; Technology</em></li>
-    <li>PhysioNet Normal Sinus Rhythm RR Interval Database (nsr2db) — <a href="https://physionet.org/content/nsr2db/1.0.0/">physionet.org</a></li>
+    <li>Rogers B, Giles D, Draper N, Hoos O, Gronwald T (2021), <em>A New Detection
+    Method Defining the Aerobic Threshold for Endurance Exercise&hellip; Based on
+    Fractal Correlation Properties of Heart Rate Variability</em>, Frontiers in
+    Physiology — the a1&nbsp;=&nbsp;0.75 aerobic-threshold (VT1) landmark this app
+    uses. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7845545/">PMC7845545</a></li>
+    <li>Rogers B, Giles D, Draper N, Mourot L, Gronwald T (2021), <em>Detection of
+    the Anaerobic Threshold in Endurance Sports: Validation of a New Method Using
+    Correlation Properties of Heart Rate Variability</em>, J.&nbsp;Funct. Morphol.
+    Kinesiol. — the companion a1&nbsp;=&nbsp;0.5 (VT2) result.
+    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8167649/">PMC8167649</a></li>
+    <li>Lipponen JA, Tarvainen MP (2019), <em>A robust algorithm for heart rate
+    variability time series artefact correction using novel beat classification</em>,
+    J.&nbsp;Med. Eng. Technol. 43(3):173&ndash;181.
+    <a href="https://pubmed.ncbi.nlm.nih.gov/31314618/">PubMed&nbsp;31314618</a>
+    · doi:10.1080/03091902.2019.1640306</li>
+    <li>PhysioNet Normal Sinus Rhythm RR Interval Database (nsr2db&nbsp;v1.0.0), used
+    under <a href="https://physionet.org/content/nsr2db/view-license/1.0.0/">ODC-By&nbsp;1.0</a>
+    — <a href="https://physionet.org/content/nsr2db/1.0.0/">database</a>; PhysioNet
+    resource: Goldberger et&nbsp;al. (2000), <em>Circulation</em> 101(23):e215&ndash;e220.</li>
     <li>Cadence evidence (Chavarren&nbsp;&amp;&nbsp;Calbet, Foss&nbsp;&amp;&nbsp;Hallén, Stebbins, Beneke&nbsp;&amp;&nbsp;Alkhatib, Ahlquist, and others) — see the <a href="research/cadence.md">cadence notes</a></li>
   </ul>
 

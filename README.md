@@ -50,5 +50,6 @@ writeup, figures, and (in the app repo) the analysis code.
 
 Documentation and data in this repository are licensed **CC BY 4.0** — see
 [`LICENSE`](LICENSE). The PhysioNet fixture (`datasets/real_rr_nsr2db.txt`) is
-third-party data under its own [PhysioNet license](https://physionet.org/content/nsr2db/1.0.0/);
-keep its attribution header intact.
+third-party data under [ODC-By 1.0](https://physionet.org/content/nsr2db/view-license/1.0.0/)
+(PhysioNet [nsr2db](https://physionet.org/content/nsr2db/1.0.0/)); keep its
+attribution header intact.

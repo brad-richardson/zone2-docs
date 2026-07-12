@@ -1,6 +1,8 @@
 # Real R-R intervals (ms), PhysioNet Normal Sinus Rhythm RR Interval
 # Database (nsr2db) record nsr001, beats 20000-20479. Healthy subject,
 # resting. Source: https://physionet.org/content/nsr2db/1.0.0/
+# License: ODC-By 1.0 - https://physionet.org/content/nsr2db/view-license/1.0.0/
+# PhysioNet resource: Goldberger et al. (2000), Circulation 101(23):e215-e220.
 641
 656
 641

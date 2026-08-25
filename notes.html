@@ -111,7 +111,9 @@
   <p>This app actuates hardware attached to a person who is working hard. So the
   safety rules don&rsquo;t live in the UI where a refactor can lose them — they
   live in the portable core, each pinned by a named regression test. The governing
-  principle: <strong>every failure resolves toward easy, never toward harder.</strong></p>
+  principle for handled control paths: <strong>safety actions never request harder
+  trainer power.</strong> A process crash or OS suspension cannot issue a new FTMS
+  command, so those system-level failures are outside this guarantee.</p>
 
   <div class="table-wrap">
   <table>

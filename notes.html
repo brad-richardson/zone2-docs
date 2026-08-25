@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zone2 — how it works &amp; what I learned building it</title>
-<meta name="description" content="A fully-open writeup of an HR-clamped Zone 2 trainer controller: the control loop, the safety invariants, DFA-a1 calibration, cadence findings, and an honest negative result — plus real sample data.">
+<meta name="description" content="An open writeup of an HR-guided Zone 2 trainer controller: the shipping control loop and safety invariants, development experiments, and real sample data.">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -25,9 +25,10 @@
   execution and the honesty. When I started I couldn&rsquo;t find a plain account
   of how to build one of these — so here is mine, with the research, the
   parameters, an honest negative result, and real sample data.</p>
-  <p class="small">Single-author side project. This page describes the shipped
-  method; it is not medical advice. Absolute numbers below are one person&rsquo;s
-  settings, shown to make the design concrete.</p>
+  <p class="small">Single-author side project. The shipping overview is current
+  for Zone2&nbsp;1.1; sections marked as research archives describe development
+  experiments that are not exposed in the current App Store release. This is not
+  medical advice.</p>
 
   <hr>
 
@@ -35,12 +36,12 @@
   <p>A normal ERG workout holds <em>power</em> constant. Your body doesn&rsquo;t
   cooperate: as you warm up, dehydrate, and fatigue, your heart rate drifts
   upward at the same watts — <strong>cardiac drift</strong> — and an &ldquo;easy&rdquo;
-  ride quietly becomes a tempo ride. Zone2 inverts the control variable. It holds
-  your <em>heart rate</em> in a band and lets the trainer&rsquo;s power move
+  ride quietly becomes a tempo ride. Zone2 inverts the control variable. It uses
+  your <em>heart rate</em> as feedback and lets the trainer&rsquo;s power move
   underneath it.</p>
 
-  <blockquote class="mechanism">Normal ERG locks the watts and lets your effort
-  drift. Zone2 holds the effort and lets the watts move.</blockquote>
+  <blockquote class="mechanism">Normal ERG locks the watts and lets heart rate
+  drift. Zone2 steers from heart rate and lets the watts move.</blockquote>
 
   <p>This isn&rsquo;t a compromise — for the Zone 2 goal specifically it&rsquo;s the
   more honest signal. When HR and power disagree, heart rate is the better proxy
@@ -75,31 +76,36 @@
     it, 60&nbsp;min standard, 90+ for trained riders. One continuous session beats
     the same minutes split in two. 3&nbsp;days/week improves; more is better up to
     a point.</li>
-    <li><strong>Little warmup needed.</strong> A 5–10&nbsp;min ramp-in lets HR rise
-    into the band before the clamp engages; a few minutes to spin down.</li>
+    <li><strong>Control starts immediately.</strong> Zone2 begins easy and the
+    closed loop runs from the first valid heart-rate samples. Reaching the band
+    still takes several minutes because the body responds gradually; a few easy
+    minutes to spin down remain useful.</li>
   </ul>
 
   <h2>The control loop</h2>
-  <p>The loop is deliberately simple and slow — a calm hand on the dial, not a
-  twitchy PID. Every tick (1&nbsp;Hz) it reads HR and, on a slower cadence, nudges
-  the trainer&rsquo;s target power:</p>
+  <p>The shipping behavior-v17 loop is continuous and bounded — a calm hand on
+  the dial, not a sequence of fixed jumps. Once per second it reads smoothed
+  heart rate, updates an adaptive position-form regulator, and proposes the
+  trainer power that best fits the centre of the saved band. The shared actuator
+  then moves progressively toward that request:</p>
 
   <div class="table-wrap">
   <table>
     <thead><tr><th>Knob</th><th>Value</th><th>Why</th></tr></thead>
     <tbody>
-      <tr><td>Decision cadence</td><td>every 30&nbsp;s</td><td>HR responds to a power change on the order of tens of seconds; reacting faster just chases noise.</td></tr>
-      <tr><td>HR smoothing</td><td>15&nbsp;s window</td><td>Decide against smoothed HR, not the latest beat, so one high sample doesn&rsquo;t yank the trainer.</td></tr>
-      <tr><td>Step up</td><td>+4&nbsp;W</td><td>When HR sits below band, add watts gently.</td></tr>
-      <tr><td>Step down</td><td>&minus;8&nbsp;W</td><td><strong>Asymmetric on purpose.</strong> Over-band must back off <em>faster</em> than under-band ramps up — the failure that matters is going too hard.</td></tr>
-      <tr><td>Ramp-in start</td><td>a low floor</td><td>Begin easy and rise into the band; never start with a jolt.</td></tr>
+      <tr><td>Input cadence</td><td>1&nbsp;Hz</td><td>Each valid sample updates the same regulator; there is no 30-second decision timer.</td></tr>
+      <tr><td>HR smoothing</td><td>15&nbsp;s</td><td>Control uses the displayed smoothed response rather than letting one high beat yank the trainer.</td></tr>
+      <tr><td>Nominal law</td><td>adaptive PI</td><td>An evolving watt estimate plus bounded band error produces one desired target every tick.</td></tr>
+      <tr><td>Trainer delivery</td><td>up to 2&nbsp;W/s</td><td>Normal changes are slew-limited in either direction so a new request is delivered progressively.</td></tr>
+      <tr><td>Above-band authority</td><td>downward only</td><td>A separate governor can withhold or lower the nominal request when displayed HR is above the band; it never raises power there.</td></tr>
     </tbody>
   </table>
   </div>
 
-  <p>That asymmetry — shed watts twice as fast as you add them — is the whole
-  temperament of the thing. Under an HR clamp, the direction you never want to be
-  slow about is <em>down</em>.</p>
+  <p>This replaced the early prototype&rsquo;s 30-second +4/&minus;8&nbsp;W step
+  scheme. The current app does not issue one fixed-size &ldquo;ease&rdquo; command;
+  it continually revises a desired target while the delivery and safety layers
+  keep the result bounded.</p>
 
   <h2>Safety invariants — the part I&rsquo;m proudest of</h2>
   <p>This app actuates hardware attached to a person who is working hard. So the
@@ -114,8 +120,8 @@
       <tr><td>HR signal lost</td><td>The target <em>decays</em> toward the ramp-in floor (~1&nbsp;W/s after a short grace) — it never escalates power to &ldquo;chase&rdquo; a heart rate it can no longer see.</td></tr>
       <tr><td>Implausible HR</td><td>Raw HR outside 30–220&nbsp;bpm is dropped at intake; stale packets are rejected by timestamp. (A valid <em>constant</em> BPM is <em>not</em> treated as stuck — steady HR is real.)</td></tr>
       <tr><td>Lost skin contact</td><td>The strap&rsquo;s contact bit, debounced ~5&nbsp;s to ignore jersey flutter, routes into the same ease-down path — earlier and more specific than the stale-signal backstop.</td></tr>
-      <tr><td>Power ceiling</td><td>Every target passes a clamp to the max watts you set; a corrupt config (e.g. min&nbsp;≥&nbsp;max, which would invert the clamp into a floor) is rejected on load and falls back to safe defaults.</td></tr>
-      <tr><td>HR ceiling hard-stop</td><td>A hard ceiling above your band bypasses the slow loop and latches. It <em>auto-tracks</em> the band (band-top + a fixed margin) so it can&rsquo;t be accidentally left below the target.</td></tr>
+      <tr><td>Power ceiling</td><td>Every target passes an internal command ceiling. It is deliberately not a rider setting; a corrupt configuration that could invert the clamp is rejected on load and falls back to safe defaults.</td></tr>
+      <tr><td>HR ceiling hard-stop</td><td>A hard ceiling above your band bypasses the nominal loop and latches. It <em>auto-tracks</em> the band (band-top + a fixed margin) so it can&rsquo;t be accidentally left below the target.</td></tr>
     </tbody>
   </table>
   </div>
@@ -125,14 +131,26 @@
   waiting for real seconds. That&rsquo;s what let me trust it before pointing it at
   a trainer with my own legs on it.</p>
 
-  <h2>Calibration: measuring your easy band with DFA&#8209;a1</h2>
-  <p>You can set the band three ways: from age (≈67–73% of estimated max HR, centre
-  ~70% — the conversational-longevity Zone 2, not the tempo that %-of-max formulas
-  drift into), from threshold HR (80–87% of LTHR when you know it), or by
-  <em>measuring</em> it with a short step test.</p>
+  <h2>Band setup in the current release</h2>
+  <p>The shipping app offers three simple inputs: an observed maximum heart rate
+  from Apple&nbsp;Health, an age-based maximum estimate, or a maximum heart rate
+  you already know. You review and confirm the resulting band before Zone2 saves
+  it. The current public release does not expose threshold-HR entry or a DFA-a1
+  calibration test.</p>
 
-  <p>The measurement uses <strong>DFA&#8209;a1</strong> — the short-scale
-  detrended-fluctuation exponent of your beat-to-beat (R-R) intervals. As you cross
+  <h2>Research archive: DFA&#8209;a1 calibration</h2>
+  <div class="note warn">
+    <span class="label">Not in Zone2 1.1</span>
+    The material below records an experimental calibration path built during
+    development. It remains useful as open research and test provenance, but it
+    is not an advertised or reachable feature in the current App Store build.
+  </div>
+
+  <p>The experiment used <strong>DFA&#8209;a1</strong> — the short-scale
+  detrended-fluctuation exponent of beat-to-beat (R-R) intervals — to estimate
+  the top of an easy aerobic band with a short step test.</p>
+
+  <p>As a rider crosses
   the first ventilatory threshold (VT1, the top of Zone 2), heart-rate variability
   loses its fractal correlation and a1 falls through <strong>~0.75</strong>. The
   step test walks power up in rungs, holding ~90&nbsp;rpm, and reads the HR at which
@@ -174,7 +192,7 @@
   crashes; the plain fixed-20%-drop default gave false threshold crossings.</p>
 
   <h3>What&rsquo;s validated — and what isn&rsquo;t</h3>
-  <p>Honesty is a feature here, so the app says exactly this: the box math is
+  <p>The experimental UI stated its limits plainly: the box math is
   validated against a reference on public data; the VT1 read reports its HR with a
   confidence interval (the a1 uncertainty propagated through the local HR-vs-a1
   slope, floored at ±2&nbsp;bpm). It is <strong>biased low</strong> — it tends to
@@ -184,28 +202,21 @@
   read is anything more than a good-quality a1 read.
   (<a href="research/raw-pmd-fusion.md">the deeper calibration writeup</a>)</p>
 
-  <h2>Cadence: the &ldquo;fool&rsquo;s-gold watts&rdquo; trap</h2>
-  <p>An HR clamp changes what cadence means, and this took me a while to see
-  clearly (<a href="research/cadence.md">full cadence notes</a>):</p>
+  <h2>Cadence: what survived the experiments</h2>
+  <p>Cadence can affect heart rate at matched power, but the direction and size
+  vary by rider. The development notes are retained in full
+  (<a href="research/cadence.md">cadence research</a>); the shipping guidance is
+  intentionally modest:</p>
   <ul>
-    <li>Under a fixed HR, grinding at a <em>low</em> cadence shows <em>more</em>
-    watts — but it earns them by loading the muscle harder (more force per stroke,
-    more fast-twitch recruitment), <strong>not</strong> by adding aerobic stimulus.
-    Aerobic adaptation tracks cardiovascular load and time-in-zone, which the clamp
-    already fixes — not the watts number on screen. So &ldquo;optimizing&rdquo; the
-    watts by grinding pulls the wrong way for the Zone 2 goal.</li>
-    <li>A higher cadence costs a few bpm at the same watts (rule of thumb ~+5&nbsp;bpm
-    per +20&nbsp;rpm), so under the clamp it simply settles on slightly fewer watts —
-    which is fine.</li>
-    <li>The upshot in the app: a comfortable ~85–95&nbsp;rpm band, a cue that nudges
-    <em>up</em> off a sustained grind but never toward it, and a post-ride flag when
-    average cadence fell low — so a grind can&rsquo;t be misread as a fitness gain.
-    (The popular &ldquo;low cadence burns more fat&rdquo; and &ldquo;San Millán says
-    85–95&rdquo; lines are both folklore; I don&rsquo;t use them.)</li>
+    <li>Choose a comfortable cadence you can hold steadily and let the heart-rate
+    controller adapt around it.</li>
+    <li>The app can nudge you when cadence falls into a sustained grind, but it
+    does not prescribe one universal &ldquo;best&rdquo; range.</li>
+    <li>Do not treat cadence as a reliable fat-use lever or read a higher wattage
+    at one cadence as proof of a better aerobic session.</li>
   </ul>
-  <p>Corollary that matters for trend-tracking: watts-at-a-given-HR is only a clean
-  fitness signal when cadence is held roughly constant between rides — which is one
-  more reason to fix the band.</p>
+  <p>For comparisons across rides, keeping cadence reasonably similar removes one
+  source of noise from watts-at-a-given-HR trends.</p>
 
   <h2>An honest negative result: raw ECG/accelerometer respiration</h2>
   <p>The Polar&nbsp;H10 can stream raw single-lead ECG (130&nbsp;Hz) and chest
@@ -254,8 +265,8 @@
     band&rdquo; is directly observed and powerful. &ldquo;Prevented 17 minutes in
     Zone 3&rdquo; is a model I didn&rsquo;t validate, so I don&rsquo;t say it.</li>
     <li><strong>Bias the whole system toward easy.</strong> Undershooting Zone 2 is
-    cheap; overshooting is the failure. Every default — the low VT1 bias, the fast
-    step-down, the ease-on-signal-loss — leans the same way.</li>
+    cheap; overshooting is the failure. The hard HR ceiling, downward-only
+    over-band authority, and ease-on-signal-loss path all lean the same way.</li>
     <li><strong>Test in virtual time.</strong> An injected clock made the scary
     lifecycle cases (disconnect, half-open link, resume) ordinary unit tests.</li>
   </ul>
@@ -323,7 +334,7 @@
       <a href="privacy.html">Privacy</a>
       <a href="https://github.com/brad-richardson/zone2-docs">GitHub</a>
     </nav>
-    Zone2 — HR-clamped Zone&nbsp;2 training for smart trainers. Made by Brad Richardson.
+    Zone2 — HR-guided Zone&nbsp;2 training for smart trainers. Made by Brad Richardson.
   </footer>
 </div>
 </body>

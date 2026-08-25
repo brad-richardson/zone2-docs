@@ -1,6 +1,6 @@
 # zone2-docs
 
-Public pages, build notes, and sample data for **Zone2** — an HR-clamped Zone 2
+Public pages, build notes, and sample data for **Zone2** — an HR-guided Zone 2
 training app for smart trainers (iPhone & iPad).
 
 This repository serves the app's website via GitHub Pages and hosts the

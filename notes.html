@@ -72,10 +72,10 @@
     oxidation for up to ~30&nbsp;minutes afterward — so the &ldquo;Zone 2&rdquo;
     workouts full of bursts and tempo bumps optimize engagement, not the stimulus.
     Zone2&rsquo;s presets hold one flat band.</li>
-    <li><strong>Duration &amp; frequency.</strong> ~45&nbsp;min minimum to be worth
-    it, 60&nbsp;min standard, 90+ for trained riders. One continuous session beats
-    the same minutes split in two. 3&nbsp;days/week improves; more is better up to
-    a point.</li>
+    <li><strong>Duration &amp; frequency.</strong> Zone2 offers 30, 45, 60, and
+    90-minute plans, but there is no universal minimum or ideal frequency.
+    Choose repeatable sessions that fit your training background, goals, and
+    recovery; a coach or clinician can help with individual guidance.</li>
     <li><strong>Control starts immediately.</strong> Zone2 begins easy and the
     closed loop runs from the first valid heart-rate samples. Reaching the band
     still takes several minutes because the body responds gradually; a few easy
@@ -198,8 +198,9 @@
   validated against a reference on public data; the VT1 read reports its HR with a
   confidence interval (the a1 uncertainty propagated through the local HR-vs-a1
   slope, floored at ±2&nbsp;bpm). It is <strong>biased low</strong> — it tends to
-  place VT1 a touch under the true threshold — which is the safe direction for a
-  Zone 2 app: undershooting the easy band costs nothing. What is <em>not</em>
+  place VT1 a touch under the true threshold — which is the conservative direction
+  for this experimental estimate, though it can also leave a rider below their
+  intended training intensity. What is <em>not</em>
   claimed: that a single step test is a lab test, or that a &ldquo;confirmed&rdquo;
   read is anything more than a good-quality a1 read.
   (<a href="research/raw-pmd-fusion.md">the deeper calibration writeup</a>)</p>
@@ -248,8 +249,9 @@
   Zone 2 calibration to overshoot into Zone 3 drags the rider into exactly the zone
   the whole product exists to keep them out of — to buy marginal precision on a band
   that&rsquo;s already biased safe. Add that raw PMD needs a specific strap, exclusive
-  Bluetooth access, and ~16&nbsp;MB/hour of capture, versus R-R that comes from any
-  modern strap, and the trade is lopsided. <strong>Trust the a1.</strong> The
+  Bluetooth access, and ~16&nbsp;MB/hour of capture, versus R-R intervals available
+  from compatible straps such as the Polar&nbsp;H10, and the trade is lopsided.
+  <strong>Trust the a1.</strong> The
   toolkit and the finding are kept so this can be revisited with evidence, not from
   a blank page.</p>
 
@@ -281,7 +283,8 @@
     — eight real indoor sessions: 1&nbsp;Hz HR, power, cadence, and <strong>R-R
     intervals</strong>, with a <a href="datasets/dev-calibration-2026-06/README.md">README</a>
     documenting each ride and the privacy scrub. R-R is inter-beat <em>timing</em>
-    (what every HRV app exports), enough to reproduce the DFA-a1 baseline.</li>
+    (a format some HRV-capable apps export), enough to reproduce the DFA-a1
+    baseline.</li>
     <li><a href="datasets/real_rr_nsr2db.txt">datasets/real_rr_nsr2db.txt</a> — 480
     beats from PhysioNet&rsquo;s Normal Sinus Rhythm RR database, the fixture the a1
     box-math is validated against. Used under

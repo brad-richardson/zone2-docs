@@ -38,8 +38,8 @@ datasets/
 
 The sessions in `datasets/dev-calibration-2026-06/` are **real rides, scrubbed**:
 no name, email, tokens, Strava IDs, body metrics, notes, or location — see that
-folder's README. They contain beat-to-beat (R-R) *timing*, which every HRV app
-exports, and reproduce the DFA-a1 calibration baseline.
+folder's README. They contain beat-to-beat (R-R) *timing*, which some
+HRV-capable apps can export, and reproduce the DFA-a1 calibration baseline.
 
 **Deliberately withheld:** the raw single-lead ECG / accelerometer sidecars behind
 the respiration study. Raw ECG is biometric and effectively unrevocable once in
